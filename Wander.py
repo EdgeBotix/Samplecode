@@ -1,4 +1,4 @@
-#this code puts the eBot in wander mode, where it tries to minimize distance from obstacles
+#this code puts the eBot in wander mode, where it tries to follow a wall at a specific distance using the 'left hand rule' for maze solving and a simple P controller
 
 # Copyright (c) 2014, Erik Wilhelm
 # All rights reserved.
@@ -29,36 +29,48 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-# A simple program that wanders and avoids obstacles
+import sys
+sys.path.insert(0, 'C:\Users\Erik Wilhelm\Documents\GitHub\eBot-API') #Insert your directory for the eBot-API here
 
-from finch import Finch
-from time import sleep
+from eBot import *
+import math
 
-# Instantiate the Finch object and connect to Finch
-tweety = Finch()
+myEBot = eBot()
 
-# Get the Z-Axis acceleration
-zAccel = tweety.acceleration()[2]
+myEBot.connect()
 
-# Do the following while the Finch is not upside down (z value in gees above -0.7)
-while zAccel > -0.7:
+myEBot.wheels(1, 1) #set the robot in motion, full speed ahead!
+myvalue = [0, 0, 0, 0, 0, 0]
+
+t_run=1000 #number of loop iterations (not seconds) to run for
+
+DistStr = input("Enter a distance which the robot should maintain from the wall (0.3m is nice): ")
+dist=float(DistStr) #distance to maintain from the wall
+
+kp=0.1 #proportional gain
+
+for i in range(1, t_run, 1):
+    sonars = myEBot.robot_uS()
+	
+    error=dist-sonars[0] #distance to left most sonar
     
-    left_obstacle, right_obstacle = tweety.obstacle()
-    # If there's an obstacle on the left, back up and arc
-    if left_obstacle:
-        tweety.led(255,0,0)
-        tweety.wheels(-0.3,-1.0)
-        sleep(1.0)
-    # Back up and arc in the opposite direction if there's something on the right
-    elif right_obstacle:
-        tweety.led(255,255,0)
-        tweety.wheels(-1.0, -0.3)
-        sleep(1.0)
-    # Else just go straight
-    else:
-        tweety.wheels(1.0, 1.0)
-        tweety.led(0,255,0)
-    # Keep reading in the Z acceleration
-    zAccel = tweety.acceleration()[2]
-    
-tweety.close()
+    if math.fabs(error)>0.05 # to avoid too much control
+	if error<0: #robot is too far from wall, shift left slightly
+	    control1=1+kp*error #slow down left track (error is negative)
+	    control2=1
+        else: #robot is too close to wall, shift right slightly
+	    control1=1
+	    control2=1-kp*error #slow down right track
+	    
+    myEBot.wheels(control1, control2)
+    else #do nothing below an error threshhold
+	myEBot.wheels(1,1)
+
+    print sonars
+
+myEBot.halt()
+sleep(4)
+
+myEBot.close()
+
+
