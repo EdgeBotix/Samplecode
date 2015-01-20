@@ -1,4 +1,4 @@
-# This code shows how the eBot can use an accelerometer threshhold to determine when to stop
+# This code shows how the eBot can use a light threshhold to determine when to stop
 
 # Copyright (c) 2014, Erik Wilhelm
 # All rights reserved.
@@ -44,16 +44,17 @@ myEBot.connect()
 myEBot.halt()
 myvalue = [0, 0, 0]
 sleep(1)
-Thresh = input("Enter a sum-of-square acceleration threshold above which the robot will stop moving (10 works well): ")
-bump=int(Thresh) #above this value the acceleration
+Thresh = input("Enter a sum-of-square light threshold above which the robot will stop moving (1.2 works well): ")
+dark=float(Thresh) #above this value the (lack of) light will cause the robot to stop moving
 
 myEBot.wheels(1, 1) #set the robot on a Yavin Trench Run mission! Photon Torpedos!
 
-while 1: #evenutally we will hit something
-	acc = myEBot.acceleration()
-	print mag(acc)
-	if mag(acc)>Thresh:
-		myEBot.halt()
+while True: #evenutally we will go into darkness
+        ldr = myEBot.light()
+        print mag(ldr)
+        if mag(ldr)<dark:
+                myEBot.halt()
+                break
 
 
 myEBot.halt()
