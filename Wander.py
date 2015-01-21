@@ -1,4 +1,6 @@
-#this code puts the eBot in wander mode, where it tries to follow a wall at a specific distance using the 'left hand rule' for maze solving and a simple P controller
+#This sample code puts the eBot in wander mode, where it tries to follow a wall at a specific distance using the 'left hand rule' for maze solving and a simple P controller
+
+#Note that better code would incorporate more sonars, and a better motion model for the bots
 
 # Copyright (c) 2014, Erik Wilhelm
 # All rights reserved.
@@ -44,29 +46,39 @@ myvalue = [0, 0, 0, 0, 0, 0]
 
 t_run=1000 #number of loop iterations (not seconds) to run for
 
+dist=0.3 #default target
+
 DistStr = input("Enter a distance which the robot should maintain from the wall (0.3m is nice): ")
 dist=float(DistStr) #distance to maintain from the wall
 
-kp=0.1 #proportional gain
+kp1=0.3 #proportional gain for first track
+kp2=2 #proportional gain for second track
+
+#Note, a better control system would be based on calculuated heading from the relative
+#track speeds, and a single gain controlling both
+
 
 for i in range(1, t_run, 1):
     sonars = myEBot.robot_uS()
-	
+    
     error=dist-sonars[0] #distance to left most sonar
     
-    if math.fabs(error)>0.05 # to avoid too much control
-	if error<0: #robot is too far from wall, shift left slightly
-	    control1=1+kp*error #slow down left track (error is negative)
-	    control2=1
+    if math.fabs(error)>0.05: # to avoid too much control
+        if error<0: #robot is too far from wall, shift left slightly
+            control1=1+kp1*error #slow down left track (error is negative)
+            control2=1
         else: #robot is too close to wall, shift right slightly
-	    control1=1
-	    control2=1-kp*error #slow down right track
-	    
-    myEBot.wheels(control1, control2)
-    else #do nothing below an error threshhold
-	myEBot.wheels(1,1)
+            control1=1
+            control2=1-kp2*error #slow down right track
+        myEBot.wheels(control1, control2)
+    else: #do nothing below an error threshhold
+        myEBot.wheels(1,1)
 
-    print sonars
+    #print sonars
+    #print error
+    #print control1
+    #print control2
+
 
 myEBot.halt()
 sleep(4)
