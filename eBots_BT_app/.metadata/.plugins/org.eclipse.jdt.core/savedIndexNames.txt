@@ -1,0 +1,3 @@
+INDEX VERSION 1.126+C:\Users\Erik Wilhelm\Documents\Android\BTcontrol3\.metadata\.plugins\org.eclipse.jdt.core
+52108211.index
+2293251845.index
