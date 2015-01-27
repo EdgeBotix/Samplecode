@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Handler;
+import android.util.Log;
 
 public class SamplesUtils {
 	private static Object obj=new Object();

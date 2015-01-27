@@ -1,7 +1,9 @@
 package com.retrorat.v1;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 
@@ -10,6 +12,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract.CommonDataKinds.Im;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -17,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -32,6 +36,7 @@ public class MonitorActivity extends MyActivity {
 	private BluetoothSocket socket = null;
 	
 	private OutputStream outputStream;
+	private InputStream in;
 	private InputStream inputStream;
 	
 	private Object obj1 = new Object();
@@ -40,6 +45,8 @@ public class MonitorActivity extends MyActivity {
 	public static boolean canRead = true;
 
 	public static StringBuffer hexString = new StringBuffer();
+	String test="Liu Su";
+	int num=0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,269 +82,251 @@ public class MonitorActivity extends MyActivity {
 			};
 		}.start();
 		
-		final ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggleButton1);
-        togglebutton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				if (togglebutton.isChecked()) {
-					String relay1 = "c11";
-					try {
-						if (outputStream != null) {
-							synchronized (obj2) {
-								outputStream.write(relay1.getBytes());
-							}
-						} else {
-							Toast.makeText(getBaseContext(),
-									"failed to send 1... ",
-									Toast.LENGTH_SHORT).show();
-						}
-					} catch (IOException e) {
-						Log.e(TAG, ">>", e);
-						e.printStackTrace();
-					}
-                } else {
-                    String relay1 = "c10";
-					try {
-						if (outputStream != null) {
-							synchronized (obj2) {
-								outputStream.write(relay1.getBytes());
-							}
-						} else {
-							Toast.makeText(getBaseContext(),
-									"failed to send 1... ",
-									Toast.LENGTH_SHORT).show();
-						}
-					} catch (IOException e) {
-						Log.e(TAG, ">>", e);
-						e.printStackTrace();
-					}
-                }
-				// TODO Auto-generated method stub
-			}
-        });
-        final ToggleButton togglebutton4 = (ToggleButton) findViewById(R.id.toggleButton4);
-        togglebutton4.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				if (togglebutton4.isChecked()) {
-					String relay1 = "<<1E";
-					try {
-						if (outputStream != null) {
-							synchronized (obj2) {
-								outputStream.write(relay1.getBytes());
-							}
-						} else {
-							Toast.makeText(getBaseContext(),
-									"failed to send 4... ",
-									Toast.LENGTH_SHORT).show();
-						}
-					} catch (IOException e) {
-						Log.e(TAG, ">>", e);
-						e.printStackTrace();
-					}
-                } else {
-                    Toast.makeText(getBaseContext(), "Not checked", Toast.LENGTH_SHORT).show();
-                    String relay1 = "<<1O";
-					try {
-						if (outputStream != null) {
-							synchronized (obj2) {
-								outputStream.write(relay1.getBytes());
-							}
-						} else {
-							Toast.makeText(getBaseContext(),
-									"failed to send 4... ",
-									Toast.LENGTH_SHORT).show();
-						}
-					} catch (IOException e) {
-						Log.e(TAG, ">>", e);
-						e.printStackTrace();
-					}
-                }
-				// TODO Auto-generated method stub
-			}
-        });
-        final ToggleButton togglebutton5 = (ToggleButton) findViewById(R.id.toggleButton5);
-        togglebutton5.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				if (togglebutton5.isChecked()) {
-					String relay1 = "F";
-					try {
-						if (outputStream != null) {
-							synchronized (obj2) {
-								outputStream.write(relay1.getBytes());
-							}
-						} else {
-							Toast.makeText(getBaseContext(),
-									"failed to send ... 5",
-									Toast.LENGTH_SHORT).show();
-						}
-					} catch (IOException e) {
-						Log.e(TAG, ">>", e);
-						e.printStackTrace();
-					}
-                } else {
-                    String relay1 = "2b";
-					try {
-						if (outputStream != null) {
-							synchronized (obj2) {
-								outputStream.write(relay1.getBytes());
-							}
-						} else {
-							Toast.makeText(getBaseContext(),
-									"failed to send ... 5",
-									Toast.LENGTH_SHORT).show();
-						}
-					} catch (IOException e) {
-						Log.e(TAG, ">>", e);
-						e.printStackTrace();
-					}
-                }
-				// TODO Auto-generated method stub
-			}
-        });
-        final ToggleButton togglebutton6 = (ToggleButton) findViewById(R.id.toggleButton6);
-        togglebutton6.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				if (togglebutton6.isChecked()) {
-					String relay1 = "8w250;250";
-					try {
-						if (outputStream != null) {
-							synchronized (obj2) {
-								outputStream.write(relay1.getBytes());
-							}
-						} else {
-							Toast.makeText(getBaseContext(),
-									"failed to send ... 6",
-									Toast.LENGTH_SHORT).show();
-						}
-					} catch (IOException e) {
-						Log.e(TAG, ">>", e);
-						e.printStackTrace();
-					}
-                } else {
-                    String relay1 = "2H";
-					try {
-						if (outputStream != null) {
-							synchronized (obj2) {
-								outputStream.write(relay1.getBytes());
-							}
-						} else {
-							Toast.makeText(getBaseContext(),
-									"failed to send ... 6",
-									Toast.LENGTH_SHORT).show();
-						}
-					} catch (IOException e) {
-						Log.e(TAG, ">>", e);
-						e.printStackTrace();
-					}
-                }
-				// TODO Auto-generated method stub
-			}
-        });
-        final ToggleButton togglebutton7 = (ToggleButton) findViewById(R.id.toggleButton7);
-        togglebutton7.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				if (togglebutton7.isChecked()) {
-					String relay1 = "c71";
-					try {
-						if (outputStream != null) {
-							synchronized (obj2) {
-								outputStream.write(relay1.getBytes());
-							}
-						} else {
-							Toast.makeText(getBaseContext(),
-									"failed to send ... 7",
-									Toast.LENGTH_SHORT).show();
-						}
-					} catch (IOException e) {
-						Log.e(TAG, ">>", e);
-						e.printStackTrace();
-					}
-                } else {
-                    String relay1 = "c70";
-					try {
-						if (outputStream != null) {
-							synchronized (obj2) {
-								outputStream.write(relay1.getBytes());
-							}
-						} else {
-							Toast.makeText(getBaseContext(),
-									"failed to send ... 7",
-									Toast.LENGTH_SHORT).show();
-						}
-					} catch (IOException e) {
-						Log.e(TAG, ">>", e);
-						e.printStackTrace();
-					}
-                }
-				// TODO Auto-generated method stub
-			}
-        });
-        final ToggleButton togglebutton8 = (ToggleButton) findViewById(R.id.toggleButton8);
-        togglebutton8.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				if (togglebutton8.isChecked()) {
-					String relay1 = "c81";
-					try {
-						if (outputStream != null) {
-							synchronized (obj2) {
-								outputStream.write(relay1.getBytes());
-							}
-						} else {
-							Toast.makeText(getBaseContext(),
-									"failed to send ... 8",
-									Toast.LENGTH_SHORT).show();
-						}
-					} catch (IOException e) {
-						Log.e(TAG, ">>", e);
-						e.printStackTrace();
-					}
-                } else {
-                    String relay1 = "c80";
-					try {
-						if (outputStream != null) {
-							synchronized (obj2) {
-								outputStream.write(relay1.getBytes());
-							}
-						} else {
-							Toast.makeText(getBaseContext(),
-									"failed to send ... 8",
-									Toast.LENGTH_SHORT).show();
-						}
-					} catch (IOException e) {
-						Log.e(TAG, ">>", e);
-						e.printStackTrace();
-					}
-                }
-				// TODO Auto-generated method stub
-			}
-        });
+//		final ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggleButton1);
+//        togglebutton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+//
+//			public void onCheckedChanged(CompoundButton buttonView,
+//					boolean isChecked) {
+//				if (togglebutton.isChecked()) {
+//					String relay1 = "<<1?";
+//					try {
+//						if (outputStream != null) {
+//							synchronized (obj2) {
+//								outputStream.write(relay1.getBytes());
+//							}
+//						} else {
+//							Toast.makeText(getBaseContext(),
+//									"failed to send 1... ",
+//									Toast.LENGTH_SHORT).show();
+//						}
+//					} catch (IOException e) {
+//						Log.e(TAG, ">>", e);
+//						e.printStackTrace();
+//					}
+//                } else {
+//                    String relay1 = "c10";
+//					try {
+//						if (outputStream != null) {
+//							synchronized (obj2) {
+//								outputStream.write(relay1.getBytes());
+//							}
+//						} else {
+//							Toast.makeText(getBaseContext(),
+//									"failed to send 1... ",
+//									Toast.LENGTH_SHORT).show();
+//						}
+//					} catch (IOException e) {
+//						Log.e(TAG, ">>", e);
+//						e.printStackTrace();
+//					}
+//                }
+//				// TODO Auto-generated method stub
+//			}
+//        });
         
-        Button pushButton = (Button) findViewById(R.id.button1);
-        pushButton.setOnTouchListener(startButtonListener);
+		ImageButton SonarButton = (ImageButton) findViewById(R.id.Button11);
+	    SonarButton.setOnTouchListener(startButtonListener11);
+		
+	    ImageButton CheckConnectionButton = (ImageButton) findViewById(R.id.Button10);
+        CheckConnectionButton.setOnTouchListener(startButtonListener10);
         
-        Button pushDriverButton = (Button) findViewById(R.id.toggleButton2);
-        pushDriverButton.setOnTouchListener(driverDoorListener);
+        ImageButton startEngineButton = (ImageButton) findViewById(R.id.Button9);
+        startEngineButton.setOnTouchListener(startButtonListener9);
         
-        Button pushPassengerButton = (Button) findViewById(R.id.toggleButton3);
-        pushPassengerButton.setOnTouchListener(passengerDoorListener);
+        ImageButton pushForwardButton = (ImageButton) findViewById(R.id.Button1);
+        pushForwardButton.setOnTouchListener(startButtonListener);
+        
+        ImageButton pushBackwardButton = (ImageButton) findViewById(R.id.Button2);
+        pushBackwardButton.setOnTouchListener(startButtonListener2);
+        
+//        
+        ImageButton pushLeftButton = (ImageButton) findViewById(R.id.Button3);
+        pushLeftButton.setOnTouchListener(startButtonListener3);
+//        
+        ImageButton pushRightButton = (ImageButton) findViewById(R.id.Button4);
+        pushRightButton.setOnTouchListener(startButtonListener4);
+//        
+        ImageButton pushFLButton = (ImageButton) findViewById(R.id.Button5);
+        pushFLButton.setOnTouchListener(startButtonListener5);
+//        
+        ImageButton pushFRButton = (ImageButton) findViewById(R.id.Button6);
+        pushFRButton.setOnTouchListener(startButtonListener6);
+//        
+        ImageButton pushBLButton = (ImageButton) findViewById(R.id.Button7);
+        pushBLButton.setOnTouchListener(startButtonListener7);
+//        
+        ImageButton pushBRButton = (ImageButton) findViewById(R.id.Button8);
+        pushBRButton.setOnTouchListener(startButtonListener8);
+        
+
 	}
+	
+	private OnTouchListener startButtonListener11 = new OnTouchListener(){
+        public boolean onTouch(View v, MotionEvent event) {
+           switch ( event.getAction() ) {
+            case MotionEvent.ACTION_DOWN: 
+            	
+            	String relay1 = "2T";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay1.getBytes());
+						}
+						
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send 4... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+				Toast.makeText(getBaseContext(), "Not checked", Toast.LENGTH_SHORT).show();
+                String relay2 = "2H";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay2.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send 4... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+				BufferedReader br = null;
+				StringBuilder sb = new StringBuilder();
+		 
+				String line;
+				try {
+//					if (inputStream.available() != 0) {
+						br = new BufferedReader(new InputStreamReader(inputStream));
+						while ((line = br.readLine()) != null) {
+							sb.append(line);
+						}
+//					}
+					
+		 
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					if (br != null) {
+						try {
+							br.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				String feedback=sb.toString();
+				Log.d(TAG, feedback);
+				
+            case MotionEvent.ACTION_UP:
+            	
+				v.setBackgroundResource(R.drawable.check_connect);
+           }
+           return false;
+        }
+   };
+	
+	private OnTouchListener startButtonListener10 = new OnTouchListener(){
+        public boolean onTouch(View v, MotionEvent event) {
+           switch ( event.getAction() ) {
+            case MotionEvent.ACTION_DOWN: 
+            	
+            	String relay1 = "<<1E";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay1.getBytes());
+						}
+						
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send 4... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+				Toast.makeText(getBaseContext(), "Not checked", Toast.LENGTH_SHORT).show();
+                String relay2 = "<<1O";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay2.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send 4... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+				
+            case MotionEvent.ACTION_UP:
+            	
+				v.setBackgroundResource(R.drawable.check_connect);
+           }
+           return false;
+        }
+   };
+	
+	private OnTouchListener startButtonListener9 = new OnTouchListener(){
+        public boolean onTouch(View v, MotionEvent event) {
+           switch ( event.getAction() ) {
+            case MotionEvent.ACTION_DOWN: 
+            	v.setBackgroundResource(R.drawable.engine_start_pressed);
+            	String relay1 = "F";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay1.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send ... 5",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+            case MotionEvent.ACTION_UP:
+            	 String relay2 = "2b";
+					try {
+						if (outputStream != null) {
+							synchronized (obj2) {
+								outputStream.write(relay2.getBytes());
+							}
+						} else {
+							Toast.makeText(getBaseContext(),
+									"failed to send ... 5",
+									Toast.LENGTH_SHORT).show();
+						}
+					} catch (IOException e) {
+						Log.e(TAG, ">>", e);
+						e.printStackTrace();
+					}
+           
+           }
+           return false;
+        }
+   };
 	
 	private OnTouchListener startButtonListener = new OnTouchListener(){
         public boolean onTouch(View v, MotionEvent event) {
            switch ( event.getAction() ) {
             case MotionEvent.ACTION_DOWN: 
-            	String relay1 = "c11";
+            	v.setBackgroundResource(R.drawable.pressed_f);
+            	String relay1 = "8w300;300";
 				try {
 					if (outputStream != null) {
 						synchronized (obj2) {
@@ -354,7 +343,8 @@ public class MonitorActivity extends MyActivity {
 				}
 				return false;
             case MotionEvent.ACTION_UP:
-            	String relay2 = "c10";
+            	v.setBackgroundResource(R.drawable.unpressed_f);
+            	String relay2 = "2H";
 				try {
 					if (outputStream != null) {
 						synchronized (obj2) {
@@ -373,12 +363,14 @@ public class MonitorActivity extends MyActivity {
            return false;
         }  
    };
-   
-   private OnTouchListener driverDoorListener = new OnTouchListener(){
+//	
+//   
+   private OnTouchListener startButtonListener2 = new OnTouchListener(){
        public boolean onTouch(View v, MotionEvent event) {
           switch ( event.getAction() ) {
            case MotionEvent.ACTION_DOWN: 
-           	String relay1 = "c21";
+        	   	v.setBackgroundResource(R.drawable.pressed_b);
+           		String relay1 = "8w150;150";
 				try {
 					if (outputStream != null) {
 						synchronized (obj2) {
@@ -395,7 +387,8 @@ public class MonitorActivity extends MyActivity {
 				}
 				return false;
            case MotionEvent.ACTION_UP:
-           	String relay2 = "c20";
+           	String relay2 = "2H";
+           	v.setBackgroundResource(R.drawable.unpressed_b);
 				try {
 					if (outputStream != null) {
 						synchronized (obj2) {
@@ -414,12 +407,13 @@ public class MonitorActivity extends MyActivity {
           return false;
        }  
   };
-  
-  private OnTouchListener passengerDoorListener = new OnTouchListener(){
+//  
+  private OnTouchListener startButtonListener3 = new OnTouchListener(){
       public boolean onTouch(View v, MotionEvent event) {
          switch ( event.getAction() ) {
           case MotionEvent.ACTION_DOWN: 
-          	String relay1 = "c31";
+        	  v.setBackgroundResource(R.drawable.pressed_l);
+        	  String relay1 = "8w150;250";
 				try {
 					if (outputStream != null) {
 						synchronized (obj2) {
@@ -436,7 +430,8 @@ public class MonitorActivity extends MyActivity {
 				}
 				return false;
           case MotionEvent.ACTION_UP:
-          	String relay2 = "c30";
+        	v.setBackgroundResource(R.drawable.unpressed_l);
+          	String relay2 = "2H";
 				try {
 					if (outputStream != null) {
 						synchronized (obj2) {
@@ -455,6 +450,219 @@ public class MonitorActivity extends MyActivity {
          return false;
       }  
  };
+// 
+ private OnTouchListener startButtonListener4 = new OnTouchListener(){
+     public boolean onTouch(View v, MotionEvent event) {
+        switch ( event.getAction() ) {
+         case MotionEvent.ACTION_DOWN: 
+        	v.setBackgroundResource(R.drawable.pressed_r);
+         	String relay1 = "8w250;150";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay1.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send start... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+				return false;
+         case MotionEvent.ACTION_UP:
+        	 v.setBackgroundResource(R.drawable.unpressed_r);
+         	String relay2 = "2H";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay2.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send ... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+         }
+        return false;
+     }  
+};
+private OnTouchListener startButtonListener5 = new OnTouchListener(){
+    public boolean onTouch(View v, MotionEvent event) {
+       switch ( event.getAction() ) {
+        case MotionEvent.ACTION_DOWN: 
+        	v.setBackgroundResource(R.drawable.pressed_fl);
+        	String relay1 = "8w250;300";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay1.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send start... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+				return false;
+        case MotionEvent.ACTION_UP:
+        	v.setBackgroundResource(R.drawable.unpressed_fl);
+        	String relay2 = "2H";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay2.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send ... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+        }
+       return false;
+    }  
+};
+private OnTouchListener startButtonListener6 = new OnTouchListener(){
+    public boolean onTouch(View v, MotionEvent event) {
+       switch ( event.getAction() ) {
+        case MotionEvent.ACTION_DOWN: 
+        	v.setBackgroundResource(R.drawable.pressed_fr);
+        	String relay1 = "8w300;250";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay1.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send start... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+				return false;
+        case MotionEvent.ACTION_UP:
+        	v.setBackgroundResource(R.drawable.unpressed_rf);
+        	String relay2 = "2H";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay2.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send ... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+        }
+       return false;
+    }  
+};
+private OnTouchListener startButtonListener7 = new OnTouchListener(){
+    public boolean onTouch(View v, MotionEvent event) {
+       switch ( event.getAction() ) {
+        case MotionEvent.ACTION_DOWN: 
+        	v.setBackgroundResource(R.drawable.pressed_bl);
+        	String relay1 = "8w150;100";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay1.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send start... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+				return false;
+        case MotionEvent.ACTION_UP:
+        	v.setBackgroundResource(R.drawable.unpressed_bl);
+        	String relay2 = "2H";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay2.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send ... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+        }
+       return false;
+    }  
+};
+private OnTouchListener startButtonListener8 = new OnTouchListener(){
+    public boolean onTouch(View v, MotionEvent event) {
+       switch ( event.getAction() ) {
+        case MotionEvent.ACTION_DOWN: 
+        	v.setBackgroundResource(R.drawable.pressed_br);
+        	String relay1 = "8w100;150";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay1.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send start... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+				return false;
+        case MotionEvent.ACTION_UP:
+        	v.setBackgroundResource(R.drawable.unpressed_br);
+        	String relay2 = "2H";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay2.getBytes());
+						}
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send ... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+        }
+       return false;
+    }  
+};
+//   
+   
 
 	/* after select, connect to device */
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -471,6 +679,7 @@ public class MonitorActivity extends MyActivity {
 		new Thread() {
 			public void run() {
 				connect(device);
+				if(test!="3e 3e 31 42") Log.d(TAG, "Correct");
 			};
 		}.start();
 	}
@@ -499,15 +708,22 @@ public class MonitorActivity extends MyActivity {
 			inputStream = socket.getInputStream();
 			outputStream = socket.getOutputStream();
 			int read = -1;
-			final byte[] bytes = new byte[2048];
+			final byte[] bytes = new byte[4];
 			while (true) {
+				num+=1;
 				synchronized (obj1) {
 					read = inputStream.read(bytes);
+					Log.d(TAG, "HAHAHA");
 					Log.d(TAG, "read:" + read);
 					if (read > 0) {
 						final int count = read;
 						String str = SamplesUtils.byteToHex(bytes, count);
-//						Log.d(TAG, "test1:" + str);
+						Log.d(TAG, str);
+						test=test+str.toString();
+						
+						Log.d(TAG, test);
+						String times=Integer.toString(num);
+						Log.d(TAG,times );
 						String hex = hexString.toString();
 						if (hex == "") {
 							hexString.append("<--");
@@ -540,6 +756,7 @@ public class MonitorActivity extends MyActivity {
 				}
 			}
 
+
 		} catch (Exception e) {
 			Log.e(TAG, ">>", e);
 			Toast.makeText(getBaseContext(),
@@ -559,5 +776,9 @@ public class MonitorActivity extends MyActivity {
 				}
 			}
 		}
+		
 	}
+	
+	
 }
+

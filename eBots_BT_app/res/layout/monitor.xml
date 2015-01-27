@@ -1,109 +1,95 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:padding="10dip" >
-
-    <ToggleButton
-        android:id="@+id/toggleButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dip" >
+
+    <ImageButton
+        android:id="@+id/Button11"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/check_connect_unpressed" />
+   
+    <ImageButton
+        android:id="@+id/Button6"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp"
-        android:text="ToggleButton"
-        android:textOff="Power Off"
-        android:textOn="Power On" />
+        android:layout_marginRight="69dp"
+        android:layout_marginTop="197dp"
+        android:background="@drawable/unpressed_rf" />
 
-    <Button
-        android:id="@+id/toggleButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/toggleButton1"
-        android:layout_alignRight="@+id/toggleButton1"
-        android:layout_below="@+id/toggleButton1"
-        android:layout_marginTop="20dp"
-        android:text="Driver Door" />
+    <ImageButton
+        android:id="@+id/Button1"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignTop="@+id/Button6"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/unpressed_f" />
 
-    <Button
-        android:id="@+id/toggleButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/toggleButton2"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/toggleButton2"
-        android:layout_marginTop="20dp"
-        android:text="Passenger Door" />
+    <ImageButton
+        android:id="@+id/Button7"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignLeft="@+id/Button3"
+        android:layout_alignTop="@+id/Button2"
+        android:background="@drawable/unpressed_bl" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/toggleButton3"
-        android:layout_marginTop="20dp"
-        android:textOn="#4 Bank On"
-        android:textOff="#4 Bank Off"
-        android:text="ToggleButton" />
+    <ImageButton
+        android:id="@+id/Button10"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_above="@+id/Button1"
+        android:layout_marginBottom="50dp"
+        android:layout_toLeftOf="@+id/Button6"
+        android:background="@drawable/check_connect_unpressed" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/toggleButton4"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/toggleButton4"
-        android:layout_marginTop="20dp"
-        android:textOn="#5 Bank On"
-        android:textOff="#5 Bank Off"
-        android:text="ToggleButton" />
+    <ImageButton
+        android:id="@+id/Button3"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignLeft="@+id/Button5"
+        android:layout_below="@+id/Button5"
+        android:background="@drawable/unpressed_l" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/toggleButton5"
-        android:layout_below="@+id/toggleButton5"
-        android:layout_marginTop="20dp"
-        android:textOn="#6 Bank On"
-        android:textOff="#6 Bank Off"
-        android:text="ToggleButton" />
+    <ImageButton
+        android:id="@+id/Button9"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignLeft="@+id/Button1"
+        android:layout_below="@+id/Button6"
+        android:background="@drawable/engine_start_unpressed" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/toggleButton6"
-        android:layout_marginTop="20dp"
-        android:textOn="#7 Bank On"
-        android:textOff="#7 Bank Off"
-        android:text="ToggleButton" />
+    <ImageButton
+        android:id="@+id/Button4"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignTop="@+id/Button9"
+        android:layout_toRightOf="@+id/Button9"
+        android:background="@drawable/unpressed_r" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/toggleButton7"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/toggleButton7"
-        android:layout_marginTop="20dp"
-        android:textOn="#8 Bank On"
-        android:textOff="#8 Bank Off"
-        android:text="ToggleButton" />
+    <ImageButton
+        android:id="@+id/Button8"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/Button4"
+        android:layout_toRightOf="@+id/Button2"
+        android:background="@drawable/unpressed_br" />
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/toggleButton8"
-        android:layout_below="@+id/toggleButton8"
-        android:layout_marginTop="10dp"
-        android:text="Start Engine" />
+    <ImageButton
+        android:id="@+id/Button5"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_above="@+id/Button9"
+        android:layout_toLeftOf="@+id/Button10"
+        android:background="@drawable/unpressed_fl" />
 
+    <ImageButton
+        android:id="@+id/Button2"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/Button9"
+        android:layout_toLeftOf="@+id/Button4"
+        android:background="@drawable/unpressed_b" />
+    
 </RelativeLayout>
