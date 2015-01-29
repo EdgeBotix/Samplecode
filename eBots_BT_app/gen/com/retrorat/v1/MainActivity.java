@@ -16,7 +16,7 @@ import android.widget.ImageView;
 
 public class MainActivity extends MyActivity {
 	Button btnSearchDevice;
-	Button btnMonitor;
+//	Button btnMonitor;
 	Button btnExit;
 	/* Get Default Adapter */
 	private BluetoothAdapter _bluetooth = BluetoothAdapter.getDefaultAdapter();
@@ -36,17 +36,17 @@ public class MainActivity extends MyActivity {
 			}
 		});
 
-		btnMonitor = (Button) findViewById(R.id.btnMonitor);
-		btnMonitor.setOnClickListener(new OnClickListener() {
-
-			
-			public void onClick(View v) {
-				_bluetooth.enable();
-				Intent intent = new Intent();
-				intent.setClass(MainActivity.this, MonitorActivity.class);
-				startActivity(intent);
-			}
-		});
+//		btnMonitor = (Button) findViewById(R.id.btnMonitor);
+//		btnMonitor.setOnClickListener(new OnClickListener() {
+//
+//			
+//			public void onClick(View v) {
+//				_bluetooth.enable();
+//				Intent intent = new Intent();
+//				intent.setClass(MainActivity.this, MonitorActivity.class);
+//				startActivity(intent);
+//			}
+//		});
 
 		btnExit = (Button) findViewById(R.id.btnExit);
 		btnExit.setOnClickListener(new OnClickListener() {

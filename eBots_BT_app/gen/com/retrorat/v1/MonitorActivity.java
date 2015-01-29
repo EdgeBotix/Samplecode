@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -45,9 +47,12 @@ public class MonitorActivity extends MyActivity {
 	public static boolean canRead = true;
 
 	public static StringBuffer hexString = new StringBuffer();
-	String test="Liu Su";
-	int num=0;
-
+	String test="Liu Su ";
+	String test2="Liu Su";
+	boolean obstacle=false;
+	boolean ldr=false;
+	boolean connection=false;
+	boolean connect=false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,49 +86,10 @@ public class MonitorActivity extends MyActivity {
 				connect(device);
 			};
 		}.start();
-		
-//		final ToggleButton togglebutton = (ToggleButton) findViewById(R.id.toggleButton1);
-//        togglebutton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-//
-//			public void onCheckedChanged(CompoundButton buttonView,
-//					boolean isChecked) {
-//				if (togglebutton.isChecked()) {
-//					String relay1 = "<<1?";
-//					try {
-//						if (outputStream != null) {
-//							synchronized (obj2) {
-//								outputStream.write(relay1.getBytes());
-//							}
-//						} else {
-//							Toast.makeText(getBaseContext(),
-//									"failed to send 1... ",
-//									Toast.LENGTH_SHORT).show();
-//						}
-//					} catch (IOException e) {
-//						Log.e(TAG, ">>", e);
-//						e.printStackTrace();
-//					}
-//                } else {
-//                    String relay1 = "c10";
-//					try {
-//						if (outputStream != null) {
-//							synchronized (obj2) {
-//								outputStream.write(relay1.getBytes());
-//							}
-//						} else {
-//							Toast.makeText(getBaseContext(),
-//									"failed to send 1... ",
-//									Toast.LENGTH_SHORT).show();
-//						}
-//					} catch (IOException e) {
-//						Log.e(TAG, ">>", e);
-//						e.printStackTrace();
-//					}
-//                }
-//				// TODO Auto-generated method stub
-//			}
-//        });
         
+		ImageButton LDRButton = (ImageButton) findViewById(R.id.Button12);
+	    LDRButton.setOnTouchListener(startButtonListener12);
+		
 		ImageButton SonarButton = (ImageButton) findViewById(R.id.Button11);
 	    SonarButton.setOnTouchListener(startButtonListener11);
 		
@@ -139,34 +105,35 @@ public class MonitorActivity extends MyActivity {
         ImageButton pushBackwardButton = (ImageButton) findViewById(R.id.Button2);
         pushBackwardButton.setOnTouchListener(startButtonListener2);
         
-//        
+        
         ImageButton pushLeftButton = (ImageButton) findViewById(R.id.Button3);
         pushLeftButton.setOnTouchListener(startButtonListener3);
-//        
+       
         ImageButton pushRightButton = (ImageButton) findViewById(R.id.Button4);
         pushRightButton.setOnTouchListener(startButtonListener4);
-//        
+     
         ImageButton pushFLButton = (ImageButton) findViewById(R.id.Button5);
         pushFLButton.setOnTouchListener(startButtonListener5);
-//        
+        
         ImageButton pushFRButton = (ImageButton) findViewById(R.id.Button6);
         pushFRButton.setOnTouchListener(startButtonListener6);
-//        
+       
         ImageButton pushBLButton = (ImageButton) findViewById(R.id.Button7);
         pushBLButton.setOnTouchListener(startButtonListener7);
-//        
+        
         ImageButton pushBRButton = (ImageButton) findViewById(R.id.Button8);
         pushBRButton.setOnTouchListener(startButtonListener8);
         
 
 	}
 	
-	private OnTouchListener startButtonListener11 = new OnTouchListener(){
+	private OnTouchListener startButtonListener12 = new OnTouchListener(){
         public boolean onTouch(View v, MotionEvent event) {
            switch ( event.getAction() ) {
             case MotionEvent.ACTION_DOWN: 
-            	
-            	String relay1 = "2T";
+            	obstacle=false;
+            	ldr=true;
+            	String relay1 = "2D";
 				try {
 					if (outputStream != null) {
 						synchronized (obj2) {
@@ -182,13 +149,28 @@ public class MonitorActivity extends MyActivity {
 					Log.e(TAG, ">>", e);
 					e.printStackTrace();
 				}
-				Toast.makeText(getBaseContext(), "Not checked", Toast.LENGTH_SHORT).show();
-                String relay2 = "2H";
+				
+				
+            case MotionEvent.ACTION_UP:
+				v.setBackgroundResource(R.drawable.check_connect);
+           }
+           return false;
+        }
+   };
+	
+	private OnTouchListener startButtonListener11 = new OnTouchListener(){
+        public boolean onTouch(View v, MotionEvent event) {
+           switch ( event.getAction() ) {
+            case MotionEvent.ACTION_DOWN: 
+            	ldr=false;
+            	obstacle=true;
+            	String relay1 = "2O";
 				try {
 					if (outputStream != null) {
 						synchronized (obj2) {
-							outputStream.write(relay2.getBytes());
+							outputStream.write(relay1.getBytes());
 						}
+						
 					} else {
 						Toast.makeText(getBaseContext(),
 								"failed to send 4... ",
@@ -198,32 +180,7 @@ public class MonitorActivity extends MyActivity {
 					Log.e(TAG, ">>", e);
 					e.printStackTrace();
 				}
-				BufferedReader br = null;
-				StringBuilder sb = new StringBuilder();
-		 
-				String line;
-				try {
-//					if (inputStream.available() != 0) {
-						br = new BufferedReader(new InputStreamReader(inputStream));
-						while ((line = br.readLine()) != null) {
-							sb.append(line);
-						}
-//					}
-					
-		 
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					if (br != null) {
-						try {
-							br.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-				String feedback=sb.toString();
-				Log.d(TAG, feedback);
+				
 				
             case MotionEvent.ACTION_UP:
             	
@@ -272,7 +229,6 @@ public class MonitorActivity extends MyActivity {
 				}
 				
             case MotionEvent.ACTION_UP:
-            	
 				v.setBackgroundResource(R.drawable.check_connect);
            }
            return false;
@@ -283,7 +239,9 @@ public class MonitorActivity extends MyActivity {
         public boolean onTouch(View v, MotionEvent event) {
            switch ( event.getAction() ) {
             case MotionEvent.ACTION_DOWN: 
-            	v.setBackgroundResource(R.drawable.engine_start_pressed);
+            	connection=true;
+            	if(connect=true) v.setBackgroundResource(R.drawable.engine_start_pressed);
+            	
             	String relay1 = "F";
 				try {
 					if (outputStream != null) {
@@ -679,7 +637,6 @@ private OnTouchListener startButtonListener8 = new OnTouchListener(){
 		new Thread() {
 			public void run() {
 				connect(device);
-				if(test!="3e 3e 31 42") Log.d(TAG, "Correct");
 			};
 		}.start();
 	}
@@ -710,7 +667,6 @@ private OnTouchListener startButtonListener8 = new OnTouchListener(){
 			int read = -1;
 			final byte[] bytes = new byte[4];
 			while (true) {
-				num+=1;
 				synchronized (obj1) {
 					read = inputStream.read(bytes);
 					Log.d(TAG, "HAHAHA");
@@ -719,11 +675,27 @@ private OnTouchListener startButtonListener8 = new OnTouchListener(){
 						final int count = read;
 						String str = SamplesUtils.byteToHex(bytes, count);
 						Log.d(TAG, str);
+						test2=str;
+						if(connection==true){
+							Pattern p=Pattern.compile("3e");
+							Matcher ma=p.matcher(test2);
+							while(ma.find()){
+								Log.d(TAG, "Connected!");
+								connect=true;
+							}
+							connection=false;
+						}
+						if(obstacle==true){
+							test+="Obstacle";
+							obstacle=false;
+						}
+						if(ldr==true){
+							test+="LDR";
+							ldr=false;
+						}
 						test=test+str.toString();
 						
 						Log.d(TAG, test);
-						String times=Integer.toString(num);
-						Log.d(TAG,times );
 						String hex = hexString.toString();
 						if (hex == "") {
 							hexString.append("<--");
@@ -755,9 +727,9 @@ private OnTouchListener startButtonListener8 = new OnTouchListener(){
 					}
 				}
 			}
-
-
 		} catch (Exception e) {
+//			if(test=="Liu Su 3e 3e 31 42 30 0a ") Log.d(TAG, "Correct");
+//			else Log.d(TAG, "Incorrect");
 			Log.e(TAG, ">>", e);
 			Toast.makeText(getBaseContext(),
 					getResources().getString(R.string.ioexception),
