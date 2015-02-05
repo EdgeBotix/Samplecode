@@ -116,4 +116,34 @@ public class SamplesUtils {
 		}
 		return sb.toString();
 	}
+	
+	public static String hexToAscii(String s){
+		String[] array=s.split(" ");
+		String[] newArray=array;
+		String newString=new String();
+		for(int i=0;i<array.length;i++){
+			newArray[i]=Integer.toString(Integer.parseInt(array[i],16));
+			newString+=" "+newArray[i];
+		}
+		return newString;
+	}
+	public static String asciiToString(String value)  
+	{  
+	    StringBuffer sbu = new StringBuffer(); 
+	    String[] chars = value.split(" ");  
+	    for (int i = 0; i < chars.length; i++) {  
+	        sbu.append((char) Integer.parseInt(chars[i]));  
+	        
+	    }  
+	    return sbu.toString();  
+	} 
+	public static String trimString(String value)  
+	{  
+	    StringBuffer sbu = new StringBuffer(); 
+	    String[] chars = value.split(" ");  
+	    for (int i = 0; i < chars.length; i++) {  
+	        sbu.append((char) Integer.parseInt(chars[i].trim(),10));
+	    }  
+	    return sbu.toString();  
+	} 
 }
