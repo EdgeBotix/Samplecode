@@ -18,12 +18,14 @@ import android.os.Handler;
 import android.provider.ContactsContract.CommonDataKinds.Im;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -50,6 +52,7 @@ public class MonitorActivity extends MyActivity {
 	public static StringBuffer hexString = new StringBuffer();
 	String test="Liu Su ";
 	String test2="Liu Su";
+	String test3="Liu Su";
 	boolean obstacle=false;
 	boolean ldr=false;
 	boolean connection=false;
@@ -59,6 +62,8 @@ public class MonitorActivity extends MyActivity {
 	int obstacleCount=1;
 	int temp1=0;
 	int temp2=0;
+	int temp3=0;
+//	String data="HAHA";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -93,7 +98,8 @@ public class MonitorActivity extends MyActivity {
 			};
 		}.start();
  
-        ImageButton pushForwardButton = (ImageButton) findViewById(R.id.Button1);
+        
+		ImageButton pushForwardButton = (ImageButton) findViewById(R.id.Button1);
         pushForwardButton.setOnTouchListener(startButtonListener);
         
         ImageButton pushBackwardButton = (ImageButton) findViewById(R.id.Button2);
@@ -132,7 +138,102 @@ public class MonitorActivity extends MyActivity {
 	    
 	    ImageButton ObstacleButton = (ImageButton) findViewById(R.id.Button13);
 	    ObstacleButton.setOnTouchListener(startButtonListener13);
-	}
+	    
+//	    ImageButton DisplayObstacleButton = (ImageButton) findViewById(R.id.Button14);
+//	    DisplayObstacleButton.setOnTouchListener(startButtonListener14);
+//	    
+//	    ImageButton DisplayLDRButton = (ImageButton) findViewById(R.id.Button15);
+//	    DisplayObstacleButton.setOnTouchListener(startButtonListener15);
+//	    
+//	    ImageButton DisplaySonarButton = (ImageButton) findViewById(R.id.Button16);
+//	    DisplayObstacleButton.setOnTouchListener(startButtonListener16);
+	    
+	    Button DisplayObstacle=(Button)findViewById(R.id.B1);
+	    DisplayObstacle.setOnClickListener(new ObstacleButtonListener());
+	    
+	    Button DisplayLDR=(Button)findViewById(R.id.B2);
+	    DisplayLDR.setOnClickListener(new LDRButtonListener());
+	    
+	    Button DisplaySonar=(Button)findViewById(R.id.B3);
+	    DisplaySonar.setOnClickListener(new SonarButtonListener());
+	    
+//	    TextView textView1=(TextView)findViewById(R.id.textView1);  
+//	    textView1.setBackgroundColor(android.graphics.Color.BLUE);
+//	    textView1.setText(data);
+	    }
+	 class ObstacleButtonListener implements OnClickListener
+	    {
+	        public void onClick(View v)
+	        {
+	        	temp1=0;
+//				Log.d(TAG, "Matching");
+//				Log.d(TAG ,test);
+				Pattern p=Pattern.compile(Integer.toString(obstacleCount)+"Obstacle.*");
+				Matcher ma=p.matcher(test);
+				while(ma.find()){
+//					Log.d(TAG, "Found");
+//					Log.d(TAG, ma.group());
+					String value=ma.group();
+					value=value.substring(11);
+					value=SamplesUtils.asciiToString(value);
+					Log.d(TAG, value);
+//					if(data=="0"){
+//						Log.d(TAG,"No Obstacle Ahead!");
+//					}
+//					else{
+//						Log.d(TAG, "Obstacle Ahead!");
+//					}
+					obstacleCount++;
+					obstacle=false;
+				}   
+	        }    
+	    }
+	 
+	 class LDRButtonListener implements OnClickListener
+	    {
+	        public void onClick(View v)
+	        {
+	        	temp2=0;
+//				Log.d(TAG, "Matching");
+//				Log.d(TAG ,test);
+				Pattern p=Pattern.compile(Integer.toString(ldrCount)+"LDR.*");
+				Matcher ma=p.matcher(test);
+				while(ma.find()){
+//					Log.d(TAG, "Found");
+//					Log.d(TAG, ma.group());
+					String value=ma.group();
+					value=value.substring(6);
+					value=SamplesUtils.asciiToString(value);
+					Log.d(TAG, value);
+					ldrCount++;
+					ldr=false;
+				}   
+	        }    
+	    }
+	 
+	 class SonarButtonListener implements OnClickListener
+	    {
+	        public void onClick(View v)
+	        {
+	        	temp3=0;
+//				Log.d(TAG, "Matching");
+//				Log.d(TAG ,test);
+				Pattern p=Pattern.compile(Integer.toString(sonarCount)+"Sonar.*");
+				Matcher ma=p.matcher(test);
+				while(ma.find()){
+//					Log.d(TAG, "Found");
+//					Log.d(TAG, ma.group());
+					String value=ma.group();
+					value=value.substring(8);
+					value=SamplesUtils.asciiToString(value);
+					Log.d(TAG, value);
+					sonarCount++;
+					sonar=false;
+				}   
+	        }    
+	    }
+
+	
 
 	private OnTouchListener startButtonListener = new OnTouchListener(){
         public boolean onTouch(View v, MotionEvent event) {
@@ -454,7 +555,7 @@ private OnTouchListener startButtonListener8 = new OnTouchListener(){
 				}
 				return false;
         case MotionEvent.ACTION_UP:
-        	v.setBackgroundResource(R.drawable.unpressed_br);
+        v.setBackgroundResource(R.drawable.unpressed_br);
         	String relay2 = "2H";
 				try {
 					if (outputStream != null) {
@@ -469,7 +570,7 @@ private OnTouchListener startButtonListener8 = new OnTouchListener(){
 				} catch (IOException e) {
 					Log.e(TAG, ">>", e);
 					e.printStackTrace();
-				}
+				}	
         }
        return false;
     }  
@@ -480,9 +581,6 @@ private OnTouchListener startButtonListener9 = new OnTouchListener(){
        switch ( event.getAction() ) {
         case MotionEvent.ACTION_DOWN: 
         	v.setBackgroundResource(R.drawable.engine_start_pressed);
-//        	connection=true;
-//        	if(connect=true) v.setBackgroundResource(R.drawable.engine_start_pressed);
-        	
         	String relay1 = "F";
 			try {
 				if (outputStream != null) {
@@ -497,6 +595,11 @@ private OnTouchListener startButtonListener9 = new OnTouchListener(){
 			} catch (IOException e) {
 				Log.e(TAG, ">>", e);
 				e.printStackTrace();
+			}
+			Pattern p=Pattern.compile("62 62 49 66");
+			Matcher ma=p.matcher(test);
+			while(ma.find()){
+				Log.d(TAG, "Connected!");
 			}
         case MotionEvent.ACTION_UP:
         	 String relay2 = "2b";
@@ -626,37 +729,39 @@ private OnTouchListener startButtonListener9 = new OnTouchListener(){
 		}
 	};
 	
+	
+	
+	
 	private OnTouchListener startButtonListener13 = new OnTouchListener(){
-		public boolean onTouch(View v, MotionEvent event) {
-			switch ( event.getAction() ) {
-			case MotionEvent.ACTION_DOWN: 
-				v.setBackgroundResource(R.drawable.obstacle_pressed);
-				sonar=false;
-        		ldr=false;
-        		obstacle=true;
-        		String relay1 = "2O";
-        		try {
-        			if (outputStream != null) {
-        				synchronized (obj2) {
-        					outputStream.write(relay1.getBytes());
-        				}
+    	public boolean onTouch(View v, MotionEvent event) {
+    		switch (event.getAction() ) {
+        		case MotionEvent.ACTION_DOWN: 
+        			v.setBackgroundResource(R.drawable.obstacle_pressed);
+        			sonar=false;
+        			ldr=false;
+        			obstacle=true;
+        			String relay1 = "2O";
+        			try {
+        				if (outputStream != null) {
+        					synchronized (obj2) {
+        						outputStream.write(relay1.getBytes());
+        					}
 					
-        			} else {
-        				Toast.makeText(getBaseContext(),
-        						"failed to send 4... ",
-        						Toast.LENGTH_SHORT).show();
+        				} else {
+        					Toast.makeText(getBaseContext(),
+        							"failed to send 4... ",
+        							Toast.LENGTH_SHORT).show();
+        				}
+        			} catch (IOException e) {
+        				Log.e(TAG, ">>", e);
+        				e.printStackTrace();
         			}
-        		} catch (IOException e) {
-        			Log.e(TAG, ">>", e);
-        			e.printStackTrace();
-        		}
-			case MotionEvent.ACTION_UP:
-				v.setBackgroundResource(R.drawable.obstacle_unpressed);
-			}
-			return false;
-		}
-	};
-   
+        		case MotionEvent.ACTION_UP:
+        			v.setBackgroundResource(R.drawable.exit_pressed);	
+    		}
+    		return false;
+    		}
+		};
 
 	/* after select, connect to device */
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -705,70 +810,36 @@ private OnTouchListener startButtonListener9 = new OnTouchListener(){
 			while (true) {
 				synchronized (obj1) {
 					read = inputStream.read(bytes);
-					Log.d(TAG, "HAHAHA");
-					Log.d(TAG, "read:" + read);
+//					Log.d(TAG, "read:" + read);
 					if (read > 0) {
 						final int count = read;
 						String oldstr = SamplesUtils.byteToHex(bytes, count);
 						String str=SamplesUtils.hexToAscii(oldstr);
-//						str=SamplesUtils.asciiToString(str);
-//						str=SamplesUtils.trimString(str);
-						Log.d(TAG, str);
-//						test2=SamplesUtils.asciiToString(str);
-						if(connection==true){
-							Pattern p=Pattern.compile("3e 3e 31 42");
-							Matcher ma=p.matcher(test2);
-							while(ma.find()){
-								Log.d(TAG, "Connected!");
-							}
-							
-						}
+//						Log.d(TAG, str);
+						test2=str.toString();
 						if(obstacle==true){
 							connection=false;
-							test+=" "+Integer.toString(obstacleCount)+"Obstacle ";
-					
-							Pattern p=Pattern.compile(Integer.toString(obstacleCount)+"Obstacle");
-							Matcher ma=p.matcher(test);
-							while(ma.find()){
-								Log.d(TAG, "Found");
-								Log.d(TAG, ma.group());
-								obstacleCount++;
-								obstacle=false;
+							if(temp1==0){
+								test+=" "+Integer.toString(obstacleCount)+"Obstacle ";
+								temp1++;
 							}
 						}
 						if(ldr==true){
 							connection=false;
-							if(temp1==0){
+							if(temp2==0){
 								test+=" "+Integer.toString(ldrCount)+"LDR ";
-								temp1++;
-							}
-							Pattern p=Pattern.compile(Integer.toString(ldrCount)+"LDR.*");
-							Matcher ma=p.matcher(test);
-							while(ma.find()){
-								Log.d(TAG, "Found");
-								Log.d(TAG, ma.group());
-								ldrCount++;
-								ldr=false;
+								temp2++;
 							}
 						}
 						if(sonar==true){
 							connection=false;
-							if(temp2==0){
+							if(temp3==0){
 								test+=" "+Integer.toString(sonarCount)+"Sonar ";
-								temp2++;
-							}
-							Pattern p=Pattern.compile(Integer.toString(sonarCount)+"Sonar.*");
-							Matcher ma=p.matcher(test);
-							while(ma.find()){
-								Log.d(TAG, "Found");
-								Log.d(TAG, ma.group());
-								sonarCount++;
-								sonar=false;
+								temp3++;
 							}
 						}
 						test=test+test2;
-						
-						Log.d(TAG, test);
+//						Log.d(TAG, test);
 						String hex = hexString.toString();
 						if (hex == "") {
 							hexString.append("<--");
@@ -801,8 +872,6 @@ private OnTouchListener startButtonListener9 = new OnTouchListener(){
 				}
 			}
 		} catch (Exception e) {
-//			if(test=="Liu Su 3e 3e 31 42 30 0a ") Log.d(TAG, "Correct");
-//			else Log.d(TAG, "Incorrect");
 			Log.e(TAG, ">>", e);
 			Toast.makeText(getBaseContext(),
 					getResources().getString(R.string.ioexception),
