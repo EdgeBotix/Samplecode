@@ -146,4 +146,8 @@ public class SamplesUtils {
 	    }  
 	    return sbu.toString();  
 	} 
+	public static String[] splitString(String value){
+		String[] list=value.split(";");
+		return list;
+	}
 }

@@ -63,7 +63,54 @@ public class MonitorActivity extends MyActivity {
 	int temp1=0;
 	int temp2=0;
 	int temp3=0;
-//	String data="HAHA";
+	private TextView sonarF; 
+	private TextView sonarFL; 
+	private TextView sonarFR;
+	private TextView sonarR;
+	private TextView sonarL;
+	private TextView sonarB;
+	private TextView ldrT;
+	private TextView ldrF;
+	private TextView obsF;
+	public class SecondThread extends Thread{
+		public void run(){
+			Log.d(TAG, "Successful");
+			while(true){
+				Log.d(TAG, "Testing");
+				String relay1 = "2O";
+				try {
+					if (outputStream != null) {
+						synchronized (obj2) {
+							outputStream.write(relay1.getBytes());
+						}
+			
+					} else {
+						Toast.makeText(getBaseContext(),
+								"failed to send 4... ",
+								Toast.LENGTH_SHORT).show();
+					}
+				} catch (IOException e) {
+					Log.e(TAG, ">>", e);
+					e.printStackTrace();
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				int read = -1;
+				final byte[] bytes = new byte[2048];
+				if (read > 0) {
+					final int count = read;
+					String oldstr = SamplesUtils.byteToHex(bytes, count);
+					String str=SamplesUtils.hexToAscii(oldstr);
+					test2=str.toString();
+				}
+				Log.d(TAG, test2);
+			}
+		}
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,6 +142,7 @@ public class MonitorActivity extends MyActivity {
 		new Thread() {
 			public void run() {
 				connect(device);
+				
 			};
 		}.start();
  
@@ -124,8 +172,8 @@ public class MonitorActivity extends MyActivity {
         ImageButton pushBRButton = (ImageButton) findViewById(R.id.Button8);
         pushBRButton.setOnTouchListener(startButtonListener8);
         
-        ImageButton startEngineButton = (ImageButton) findViewById(R.id.Button9);
-        startEngineButton.setOnTouchListener(startButtonListener9);
+        Button DisplayObstacle=(Button)findViewById(R.id.B1);
+	    DisplayObstacle.setOnClickListener(new ObstacleButtonListener());
         
         ImageButton CheckConnectionButton = (ImageButton) findViewById(R.id.Button10);
         CheckConnectionButton.setOnTouchListener(startButtonListener10);
@@ -138,54 +186,47 @@ public class MonitorActivity extends MyActivity {
 	    
 	    ImageButton ObstacleButton = (ImageButton) findViewById(R.id.Button13);
 	    ObstacleButton.setOnTouchListener(startButtonListener13);
+	
 	    
-//	    ImageButton DisplayObstacleButton = (ImageButton) findViewById(R.id.Button14);
-//	    DisplayObstacleButton.setOnTouchListener(startButtonListener14);
-//	    
-//	    ImageButton DisplayLDRButton = (ImageButton) findViewById(R.id.Button15);
-//	    DisplayObstacleButton.setOnTouchListener(startButtonListener15);
-//	    
-//	    ImageButton DisplaySonarButton = (ImageButton) findViewById(R.id.Button16);
-//	    DisplayObstacleButton.setOnTouchListener(startButtonListener16);
-	    
-	    Button DisplayObstacle=(Button)findViewById(R.id.B1);
-	    DisplayObstacle.setOnClickListener(new ObstacleButtonListener());
 	    
 	    Button DisplayLDR=(Button)findViewById(R.id.B2);
 	    DisplayLDR.setOnClickListener(new LDRButtonListener());
 	    
 	    Button DisplaySonar=(Button)findViewById(R.id.B3);
-	    DisplaySonar.setOnClickListener(new SonarButtonListener());
+	    DisplaySonar.setOnClickListener(new SonarButtonListener()); 
 	    
-//	    TextView textView1=(TextView)findViewById(R.id.textView1);  
-//	    textView1.setBackgroundColor(android.graphics.Color.BLUE);
-//	    textView1.setText(data);
+	    sonarF=(TextView)findViewById(R.id.sonarF);
+	    sonarFR=(TextView)findViewById(R.id.sonarFR);
+	    sonarFL=(TextView)findViewById(R.id.sonarFL);
+	    sonarR=(TextView)findViewById(R.id.sonarR);
+	    sonarL=(TextView)findViewById(R.id.sonarL);
+	    sonarB=(TextView)findViewById(R.id.sonarB);
+	    ldrT=(TextView)findViewById(R.id.ldrT);
+	    ldrF=(TextView)findViewById(R.id.ldrF);
+	    obsF=(TextView)findViewById(R.id.obsF);
+	   
 	    }
 	 class ObstacleButtonListener implements OnClickListener
 	    {
 	        public void onClick(View v)
 	        {
 	        	temp1=0;
-//				Log.d(TAG, "Matching");
-//				Log.d(TAG ,test);
 				Pattern p=Pattern.compile(Integer.toString(obstacleCount)+"Obstacle.*");
 				Matcher ma=p.matcher(test);
 				while(ma.find()){
-//					Log.d(TAG, "Found");
-//					Log.d(TAG, ma.group());
 					String value=ma.group();
 					value=value.substring(11);
 					value=SamplesUtils.asciiToString(value);
 					Log.d(TAG, value);
-//					if(data=="0"){
-//						Log.d(TAG,"No Obstacle Ahead!");
-//					}
-//					else{
-//						Log.d(TAG, "Obstacle Ahead!");
-//					}
+					obsF.setText(value);
 					obstacleCount++;
 					obstacle=false;
+					test="";
+					obstacleCount=0;
 				}   
+	    
+	        	
+	        	
 	        }    
 	    }
 	 
@@ -193,21 +234,25 @@ public class MonitorActivity extends MyActivity {
 	    {
 	        public void onClick(View v)
 	        {
-	        	temp2=0;
-//				Log.d(TAG, "Matching");
-//				Log.d(TAG ,test);
-				Pattern p=Pattern.compile(Integer.toString(ldrCount)+"LDR.*");
-				Matcher ma=p.matcher(test);
-				while(ma.find()){
-//					Log.d(TAG, "Found");
-//					Log.d(TAG, ma.group());
-					String value=ma.group();
-					value=value.substring(6);
-					value=SamplesUtils.asciiToString(value);
-					Log.d(TAG, value);
-					ldrCount++;
-					ldr=false;
-				}   
+//	        	temp2=0;
+//				Pattern p=Pattern.compile(Integer.toString(ldrCount)+"LDR.*");
+//				Matcher ma=p.matcher(test);
+//				while(ma.find()){
+//					String value=ma.group();
+//					value=value.substring(6);
+//					value=SamplesUtils.asciiToString(value);
+//					Log.d(TAG, value);
+//					String str[]=SamplesUtils.splitString(value);
+//					ldrT.setText(str[0]);
+//					ldrF.setText(str[1]);
+//					ldrCount++;
+//					ldr=false;
+//					test="";
+//					ldrCount=0;
+//				}   
+	        	SecondThread second=new SecondThread();
+	        	second.start();
+	        		
 	        }    
 	    }
 	 
@@ -226,9 +271,18 @@ public class MonitorActivity extends MyActivity {
 					String value=ma.group();
 					value=value.substring(8);
 					value=SamplesUtils.asciiToString(value);
+					String str[]=SamplesUtils.splitString(value);
 					Log.d(TAG, value);
+					sonarR.setText(str[0]);
+					sonarFR.setText(str[1]);
+					sonarF.setText(str[2]);
+					sonarFL.setText(str[3]);
+					sonarL.setText(str[4]);
+					sonarB.setText(str[5]);
 					sonarCount++;
 					sonar=false;
+					test="";
+					sonarCount=0;
 				}   
 	        }    
 	    }
@@ -575,54 +629,6 @@ private OnTouchListener startButtonListener8 = new OnTouchListener(){
        return false;
     }  
 };
-
-private OnTouchListener startButtonListener9 = new OnTouchListener(){
-    public boolean onTouch(View v, MotionEvent event) {
-       switch ( event.getAction() ) {
-        case MotionEvent.ACTION_DOWN: 
-        	v.setBackgroundResource(R.drawable.engine_start_pressed);
-        	String relay1 = "F";
-			try {
-				if (outputStream != null) {
-					synchronized (obj2) {
-						outputStream.write(relay1.getBytes());
-					}
-				} else {
-					Toast.makeText(getBaseContext(),
-							"failed to send ... 5",
-							Toast.LENGTH_SHORT).show();
-				}
-			} catch (IOException e) {
-				Log.e(TAG, ">>", e);
-				e.printStackTrace();
-			}
-			Pattern p=Pattern.compile("62 62 49 66");
-			Matcher ma=p.matcher(test);
-			while(ma.find()){
-				Log.d(TAG, "Connected!");
-			}
-        case MotionEvent.ACTION_UP:
-        	 String relay2 = "2b";
-				try {
-					if (outputStream != null) {
-						synchronized (obj2) {
-							outputStream.write(relay2.getBytes());
-						}
-					} else {
-						Toast.makeText(getBaseContext(),
-								"failed to send ... 5",
-								Toast.LENGTH_SHORT).show();
-					}
-				} catch (IOException e) {
-					Log.e(TAG, ">>", e);
-					e.printStackTrace();
-				}
-       
-       }
-       return false;
-    }
-};
-
 	private OnTouchListener startButtonListener10 = new OnTouchListener(){
     	public boolean onTouch(View v, MotionEvent event) {
     		switch (event.getAction() ) {
@@ -643,7 +649,6 @@ private OnTouchListener startButtonListener9 = new OnTouchListener(){
         				Log.e(TAG, ">>", e);
         				e.printStackTrace();
         			}
-        			Toast.makeText(getBaseContext(), "Not checked", Toast.LENGTH_SHORT).show();
         			String relay2 = "<<1O";
         			try {
         				if (outputStream != null) {
@@ -659,8 +664,61 @@ private OnTouchListener startButtonListener9 = new OnTouchListener(){
         				Log.e(TAG, ">>", e);
         				e.printStackTrace();
         			}
+        			String relay3 = "F";
+        			try {
+        				if (outputStream != null) {
+        					synchronized (obj2) {
+        						outputStream.write(relay3.getBytes());
+        					}
+        				} else {
+        					Toast.makeText(getBaseContext(),
+        							"failed to send ... 5",
+        							Toast.LENGTH_SHORT).show();
+        				}
+        			} catch (IOException e) {
+        				Log.e(TAG, ">>", e);
+        				e.printStackTrace();
+        			}
+        			Pattern p=Pattern.compile("62 62 49 66");
+        			Matcher ma=p.matcher(test);
+        			while(ma.find()){
+        				Log.d(TAG, "Connected!");
+        			}
+        			
         		case MotionEvent.ACTION_UP:
-        			v.setBackgroundResource(R.drawable.check_connect);
+        			String relay4 = "2H";
+    				try {
+    					if (outputStream != null) {
+    						synchronized (obj2) {
+    							outputStream.write(relay4.getBytes());
+    						}
+    					} else {
+    						Toast.makeText(getBaseContext(),
+    								"failed to send ... 5",
+    								Toast.LENGTH_SHORT).show();
+    					}
+    				} catch (IOException e) {
+    					Log.e(TAG, ">>", e);
+    					e.printStackTrace();
+    				}
+    				
+        				String relay5 = "2S";
+        				try {
+        					if (outputStream != null) {
+        						synchronized (obj2) {
+        							outputStream.write(relay5.getBytes());
+        						}
+        					} else {
+        						Toast.makeText(getBaseContext(),
+        								"failed to send ... ",
+        								Toast.LENGTH_SHORT).show();
+        					}
+        				} catch (IOException e) {
+        					Log.e(TAG, ">>", e);
+        					e.printStackTrace();
+        				}
+        			
+        		
     		}
     		return false;
     		}
@@ -778,6 +836,7 @@ private OnTouchListener startButtonListener9 = new OnTouchListener(){
 		new Thread() {
 			public void run() {
 				connect(device);
+				
 			};
 		}.start();
 	}
@@ -810,12 +869,10 @@ private OnTouchListener startButtonListener9 = new OnTouchListener(){
 			while (true) {
 				synchronized (obj1) {
 					read = inputStream.read(bytes);
-//					Log.d(TAG, "read:" + read);
 					if (read > 0) {
 						final int count = read;
 						String oldstr = SamplesUtils.byteToHex(bytes, count);
 						String str=SamplesUtils.hexToAscii(oldstr);
-//						Log.d(TAG, str);
 						test2=str.toString();
 						if(obstacle==true){
 							connection=false;
