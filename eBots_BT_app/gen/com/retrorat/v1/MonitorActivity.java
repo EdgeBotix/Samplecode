@@ -71,46 +71,7 @@ public class MonitorActivity extends MyActivity {
 	private TextView sonarB;
 	private TextView ldrT;
 	private TextView ldrF;
-	private TextView obsF;
-	public class SecondThread extends Thread{
-		public void run(){
-			Log.d(TAG, "Successful");
-			while(true){
-				Log.d(TAG, "Testing");
-				String relay1 = "2O";
-				try {
-					if (outputStream != null) {
-						synchronized (obj2) {
-							outputStream.write(relay1.getBytes());
-						}
-			
-					} else {
-						Toast.makeText(getBaseContext(),
-								"failed to send 4... ",
-								Toast.LENGTH_SHORT).show();
-					}
-				} catch (IOException e) {
-					Log.e(TAG, ">>", e);
-					e.printStackTrace();
-				}
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				int read = -1;
-				final byte[] bytes = new byte[2048];
-				if (read > 0) {
-					final int count = read;
-					String oldstr = SamplesUtils.byteToHex(bytes, count);
-					String str=SamplesUtils.hexToAscii(oldstr);
-					test2=str.toString();
-				}
-				Log.d(TAG, test2);
-			}
-		}
-	}
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -145,8 +106,88 @@ public class MonitorActivity extends MyActivity {
 				
 			};
 		}.start();
- 
-        
+		
+		class ObstacleButtonListener implements OnClickListener
+		    {
+		        public void onClick(View v)
+		        {
+		        	String relay1 = "2O";
+					try {
+						if (outputStream != null) {
+							synchronized (obj2) {
+								outputStream.write(relay1.getBytes());
+							}
+				
+						} else {
+							Toast.makeText(getBaseContext(),
+									"failed to send 4... ",
+									Toast.LENGTH_SHORT).show();
+						}
+					} catch (IOException e) {
+						Log.e(TAG, ">>", e);
+						e.printStackTrace();
+					}
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        }    
+		    }
+		 class LDRButtonListener implements OnClickListener
+		    {
+		        public void onClick(View v)
+		        {
+		        	temp2=0;
+					Pattern p=Pattern.compile(Integer.toString(ldrCount)+"LDR.*");
+					Matcher ma=p.matcher(test);
+					while(ma.find()){
+						String value=ma.group();
+						value=value.substring(6);
+						value=SamplesUtils.asciiToString(value);
+						Log.d(TAG, value);
+						String str[]=SamplesUtils.splitString(value);
+						ldrT.setText(str[0]);
+						ldrF.setText(str[1]);
+						ldrCount++;
+						ldr=false;
+						test="";
+						ldrCount=0;
+		        }    
+		    }
+		 }
+		   
+		 
+		 class SonarButtonListener implements OnClickListener
+		    {
+		        public void onClick(View v)
+		        {
+		        	temp3=0;
+					Pattern p=Pattern.compile(Integer.toString(sonarCount)+"Sonar.*");
+					Matcher ma=p.matcher(test);
+					while(ma.find()){
+//						Log.d(TAG, "Found");
+//						Log.d(TAG, ma.group());
+						String value=ma.group();
+						value=value.substring(8);
+						value=SamplesUtils.asciiToString(value);
+						String str[]=SamplesUtils.splitString(value);
+						Log.d(TAG, value);
+						sonarR.setText(str[4]);
+						sonarFR.setText(str[3]);
+						sonarF.setText(str[2]);
+						sonarFL.setText(str[1]);
+						sonarL.setText(str[0]);
+						sonarB.setText(str[5]);
+						sonarCount++;
+						sonar=false;
+						test="";
+						sonarCount=0;
+					}   
+		        }    
+		    }
+		
 		ImageButton pushForwardButton = (ImageButton) findViewById(R.id.Button1);
         pushForwardButton.setOnTouchListener(startButtonListener);
         
@@ -186,8 +227,6 @@ public class MonitorActivity extends MyActivity {
 	    
 	    ImageButton ObstacleButton = (ImageButton) findViewById(R.id.Button13);
 	    ObstacleButton.setOnTouchListener(startButtonListener13);
-	
-	    
 	    
 	    Button DisplayLDR=(Button)findViewById(R.id.B2);
 	    DisplayLDR.setOnClickListener(new LDRButtonListener());
@@ -203,89 +242,8 @@ public class MonitorActivity extends MyActivity {
 	    sonarB=(TextView)findViewById(R.id.sonarB);
 	    ldrT=(TextView)findViewById(R.id.ldrT);
 	    ldrF=(TextView)findViewById(R.id.ldrF);
-	    obsF=(TextView)findViewById(R.id.obsF);
-	   
-	    }
-	 class ObstacleButtonListener implements OnClickListener
-	    {
-	        public void onClick(View v)
-	        {
-	        	temp1=0;
-				Pattern p=Pattern.compile(Integer.toString(obstacleCount)+"Obstacle.*");
-				Matcher ma=p.matcher(test);
-				while(ma.find()){
-					String value=ma.group();
-					value=value.substring(11);
-					value=SamplesUtils.asciiToString(value);
-					Log.d(TAG, value);
-					obsF.setText(value);
-					obstacleCount++;
-					obstacle=false;
-					test="";
-					obstacleCount=0;
-				}   
-	    
-	        	
-	        	
-	        }    
-	    }
-	 
-	 class LDRButtonListener implements OnClickListener
-	    {
-	        public void onClick(View v)
-	        {
-//	        	temp2=0;
-//				Pattern p=Pattern.compile(Integer.toString(ldrCount)+"LDR.*");
-//				Matcher ma=p.matcher(test);
-//				while(ma.find()){
-//					String value=ma.group();
-//					value=value.substring(6);
-//					value=SamplesUtils.asciiToString(value);
-//					Log.d(TAG, value);
-//					String str[]=SamplesUtils.splitString(value);
-//					ldrT.setText(str[0]);
-//					ldrF.setText(str[1]);
-//					ldrCount++;
-//					ldr=false;
-//					test="";
-//					ldrCount=0;
-//				}   
-	        	SecondThread second=new SecondThread();
-	        	second.start();
-	        		
-	        }    
-	    }
-	 
-	 class SonarButtonListener implements OnClickListener
-	    {
-	        public void onClick(View v)
-	        {
-	        	temp3=0;
-//				Log.d(TAG, "Matching");
-//				Log.d(TAG ,test);
-				Pattern p=Pattern.compile(Integer.toString(sonarCount)+"Sonar.*");
-				Matcher ma=p.matcher(test);
-				while(ma.find()){
-//					Log.d(TAG, "Found");
-//					Log.d(TAG, ma.group());
-					String value=ma.group();
-					value=value.substring(8);
-					value=SamplesUtils.asciiToString(value);
-					String str[]=SamplesUtils.splitString(value);
-					Log.d(TAG, value);
-					sonarR.setText(str[0]);
-					sonarFR.setText(str[1]);
-					sonarF.setText(str[2]);
-					sonarFL.setText(str[3]);
-					sonarL.setText(str[4]);
-					sonarB.setText(str[5]);
-					sonarCount++;
-					sonar=false;
-					test="";
-					sonarCount=0;
-				}   
-	        }    
-	    }
+}
+	
 
 	
 
@@ -949,7 +907,5 @@ private OnTouchListener startButtonListener8 = new OnTouchListener(){
 		}
 		
 	}
-	
-	
 }
 
